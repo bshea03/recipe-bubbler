@@ -1,6 +1,7 @@
 A Chrome extension that bubbles recipes to the top of the page when you're on a recipe website.
 
 ## Building the app
+`pnpm i`
 `pnpm run build`
 
 ## Using the app
