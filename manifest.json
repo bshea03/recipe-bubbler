@@ -1,0 +1,16 @@
+{
+  "name": "Recipe Bubbler",
+  "description": "A simple web extension that moves recipe cards to the top of the page.",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "permissions": ["activeTab", "scripting", "tabs"],
+  "action": {
+    "default_popup": "index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["scripts/content.ts"]
+    }
+  ]
+}
