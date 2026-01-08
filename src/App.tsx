@@ -1,39 +1,45 @@
-import './App.css'
-import type { Recipe } from './types/recipe.ts';
-import { useEffect, useState } from 'react';
+import { useState } from "react";
+import type { Recipe } from "schema-dts";
+import { IoClose } from "react-icons/io5";
+import RecipeCard from "./components/RecipeCard/RecipeCard.tsx";
+import { IconButtonMenu } from "./components/IconButtonMenu/IconButtonMenu.tsx";
 
-function App() {
-
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-
-  console.log(recipes);
-
-  useEffect(() => {
-    // This is where getRecipes is triggered
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0].id) {
-        chrome.tabs.sendMessage(
-          tabs[0].id,
-          { action: "getRecipes" }, 
-          (response) => {
-            if (response?.recipes) {
-              setRecipes(response.recipes);
-            }
-          }
-        );
-      }
-    });
-  }, []);
-
-  return (
-    <>
-      <div>
-        <p className="read-the-docs">
-          {recipes.map((recipe: Recipe) => <div>{recipe.name}</div>)}
-        </p>
-      </div>
-    </>
-  )
+interface AppProps {
+  recipes: Recipe[];
 }
 
-export default App
+function App({ recipes }: AppProps) {
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(recipes.length === 0);
+
+  if (recipes.length === 0) {
+    return (
+      <div className="w-full h-full p-4 overflow-y-scroll rounded-lg shadow-md">
+        <p>No recipes found</p>
+      </div>
+    );
+  }
+
+  const toggleClosed = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  return (
+    <div>
+      <IconButtonMenu /*isCollapsed={isCollapsed}*/>
+        <div className="max-h-[90vh] w-100 bg-gray-200 rounded-xl right-0">
+          <div onClick={toggleClosed} className="justify-end items-center">
+            <IoClose className="text-md" />
+          </div>
+          {recipes.map((recipe: Recipe, index: number) => (
+            <RecipeCard
+              key={recipe.name?.toString() || index}
+              recipe={recipe}
+            />
+          ))}
+        </div>
+      </IconButtonMenu>
+    </div>
+  );
+}
+
+export default App;

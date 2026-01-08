@@ -5,7 +5,10 @@
   "manifest_version": 3,
   "permissions": ["activeTab", "scripting", "tabs"],
   "action": {
-    "default_popup": "index.html"
+    "default_title": "Show recipes on page"
+  },
+  "background": {
+    "service_worker": "scripts/background.ts"
   },
   "content_scripts": [
     {
